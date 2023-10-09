@@ -35,7 +35,12 @@ function App() {
       console.error('Error:', error);
     });
   }
-  
+
+  function deleteToy(id) {
+    fetch("http://localhost:3001/toys/" + id, {method: "DELETE"})
+    .then(response => response.json())
+    .then(setToyList(prevList => prevList.filter(toy => toy.id !== id)))
+  }
 
   useEffect(() => {
     fetch("http://localhost:3001/toys")
@@ -43,19 +48,14 @@ function App() {
       .then(setToyList)
   }, [])
 
-  // Submit event in App
-  // Handle the new toy control in App
-  // Can pass the new toy into the 
-  // Handle loading in database here or at ToyCard
-
   return (
     <>
       <Header />
       {showForm ? <ToyForm newToy={newToy} setNewToy={setNewToy} onNewToySubmit={onNewToySubmit} /> : null}
       <div className="buttonContainer">
-        <button onClick={handleClick}>Add a Toy</button>
+        <button onClick={handleClick} >Add a Toy</button>
       </div>
-      <ToyContainer toyList={toyList} />
+      <ToyContainer toyList={toyList} deleteToy={deleteToy} />
     </>
   );
 }
