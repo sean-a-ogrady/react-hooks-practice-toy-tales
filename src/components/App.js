@@ -42,6 +42,27 @@ function App() {
     .then(setToyList(prevList => prevList.filter(toy => toy.id !== id)))
   }
 
+  function likeToy(id, currentLikes) {
+    fetch("http://localhost:3001/toys/" + id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        likes: currentLikes + 1
+      })
+    })
+    .then(response => response.json())
+    .then(updatedToy => {
+      setToyList(prevList => {
+        return prevList.map(toy => {
+          if (toy.id === id) return updatedToy;
+          return toy;
+        })
+      })
+    })
+  }
+
   useEffect(() => {
     fetch("http://localhost:3001/toys")
       .then(response => response.json())
@@ -55,7 +76,7 @@ function App() {
       <div className="buttonContainer">
         <button onClick={handleClick} >Add a Toy</button>
       </div>
-      <ToyContainer toyList={toyList} deleteToy={deleteToy} />
+      <ToyContainer toyList={toyList} deleteToy={deleteToy} likeToy={likeToy}/>
     </>
   );
 }
