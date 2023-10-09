@@ -1,15 +1,23 @@
 import React from "react";
 
-function ToyForm() {
+function ToyForm({newToy, setNewToy, onNewToySubmit}) {
+  
+  function updateToy(event) {
+    const {name, value} = event.target; // Destructures the name and target values from the event object
+    setNewToy({...newToy, [name]: value});
+  }
+
   return (
     <div className="container">
-      <form className="add-toy-form">
+      <form className="add-toy-form" onSubmit={onNewToySubmit}>
         <h3>Create a toy!</h3>
         <input
           type="text"
           name="name"
           placeholder="Enter a toy's name..."
           className="input-text"
+          value={newToy.name}
+          onChange={updateToy}
         />
         <br />
         <input
@@ -17,6 +25,8 @@ function ToyForm() {
           name="image"
           placeholder="Enter a toy's image URL..."
           className="input-text"
+          value={newToy.image}
+          onChange={updateToy}
         />
         <br />
         <input
